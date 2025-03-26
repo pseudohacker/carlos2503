@@ -7,13 +7,15 @@ names(my_data[[1]]) <- my_data[[1]][5,]
 ## my_data[[1]]
 
 my_data[[1]] <- my_data[[1]] |>
+  mutate(`FECHA DE ATENCION` = format(as.Date(as.numeric(`FECHA DE ATENCION`),origin = "1899-12-30"), "%Y")) |>
   filter(!is.na(`N°`)) |>
   filter(!`N°` == "N°") |>
   rowid_to_column("ID") |>
-  mutate(source = files[1])
-
-my_data[[1]] <- my_data[[1]] |>
-  select(id = matches("^ID$"),
+  mutate(source = files[1]) 
+  
+my_data[[1]] <-  my_data[[1]] %>%
+  select(anho = matches("FECHA DE ATENCION"),
+         id = matches("^ID$"),
          source = matches("source"),
          dni = matches("DNI"),
          edad = matches("EDAD"),
@@ -46,7 +48,8 @@ my_data[[2]] <- my_data[[2]] |>
   mutate(source = files[2])
 
 my_data[[2]] <- my_data[[2]] |>
-  select(id = matches("^ID$"),
+  select(anho = matches("FECHA DE ATENCION"),
+         id = matches("^ID$"),
          source = matches("source"),
          dni = matches("DNI"),
          edad = matches("EDAD"),
@@ -79,7 +82,8 @@ my_data[[3]] <- my_data[[3]] |>
   mutate(source = files[3])
 
 my_data[[3]] <- my_data[[3]] |>
-  select(id = matches("^ID$"),
+  select(anho = matches("FECHA DE ATENCION"),
+         id = matches("^ID$"),
          source = matches("source"),
          dni = matches("DNI"),
          edad = matches("EDAD"),
@@ -107,13 +111,15 @@ my_data[[3]] <- my_data[[3]] |>
 ## my_data[[4]]
 
 my_data[[4]] <- my_data[[4]] |>
+  mutate(`Fecha de EMO` = format(as.Date(as.numeric(`Fecha de EMO`),origin = "1899-12-30"), "%Y")) |>
   # filter(!is.na(`N°`)) |>
   # filter(!`N°` == "N°") |>
   rowid_to_column("ID") |>
   mutate(source = files[4])
 
 my_data[[4]] <- my_data[[4]] |>
-  select(id = matches("^ID$"),
+  select(anho = matches("FECHA DE EMO"),
+         id = matches("^ID$"),
          source = matches("source"),
          dni = matches("DNI"),
          edad = matches("^EDAD"),
@@ -125,7 +131,7 @@ my_data[[4]] <- my_data[[4]] |>
          leuc = matches("^LEUC"),
          glu = matches("^GLUCOSA"),
          ct = matches("COLESTEROL TOTAL"),
-         trig = matches("TRIGLI"),
+         trig = matches("^TRIGLI"),
          hdl = matches("VALOR HDL"),
          ldl = matches("VALOR DE LDL"),
          presion_sis = matches("SIST"),
@@ -322,13 +328,15 @@ colnames5 <- c("1 NUMERO DE HISTORIA",
 names(my_data[[5]]) <- colnames5
 
 my_data[[5]] <- my_data[[5]] |>
+  mutate(`14 FECHA DE ATENCIÓN` = format(as.Date(`14 FECHA DE ATENCIÓN`, "%d-%m-%Y"), "%Y")) |>
   filter(!is.na(`1 NUMERO DE HISTORIA`)) |>
   # filter(!`N°` == "N°") |>
   rowid_to_column("ID") |>
   mutate(source = files[5])
 
 my_data[[5]] <- my_data[[5]] |>
-  select(id = matches("^ID$"),
+  select(anho = matches("FECHA DE ATENCIÓN"),
+         id = matches("^ID$"),
          source = matches("source"),
          dni = matches("DNI"),
          edad = matches("EDAD"),
@@ -522,13 +530,15 @@ colnames6 <- c("1 NUMERO DE HISTORIA",
 names(my_data[[6]]) <- colnames6
 
 my_data[[6]] <- my_data[[6]] |>
+  mutate(`14 FECHA DE ATENCIÓN` = format(as.Date(`14 FECHA DE ATENCIÓN`, "%d-%m-%Y"), "%Y")) |>
   filter(!is.na(`1 NUMERO DE HISTORIA`)) |>
   # filter(!`N°` == "N°") |>
   rowid_to_column("ID") |>
   mutate(source = files[6])
 
 my_data[[6]] <- my_data[[6]] |>
-  select(id = matches("^ID$"),
+  select(anho = matches("FECHA DE ATENCIÓN"),
+         id = matches("^ID$"),
          source = matches("source"),
          dni = matches("DNI"),
          edad = matches("EDAD"),
@@ -738,13 +748,15 @@ colnames7 <- c(
 names(my_data[[7]]) <- colnames7
 
 my_data[[7]] <- my_data[[7]] |>
+  mutate(`14 FECHA DE ATENCIÓN` = format(as.Date(`14 FECHA DE ATENCIÓN`, "%d-%m-%Y"), "%Y")) |>
   filter(!is.na(`1 NUMERO DE HISTORIA`)) |>
   # filter(!`N°` == "N°") |>
   rowid_to_column("ID") |>
   mutate(source = files[7])
 
 my_data[[7]] <- my_data[[7]] |>
-  select(id = matches("^ID$"),
+  select(anho = matches("FECHA DE ATENCIÓN"),
+         id = matches("^ID$"),
          source = matches("source"),
          dni = matches("DNI"),
          edad = matches("EDAD"),
@@ -950,13 +962,15 @@ colnames8 <- c(
 names(my_data[[8]]) <- colnames8
 
 my_data[[8]] <- my_data[[8]] |>
+  mutate(`14 FECHA DE ATENCIÓN` = format(as.Date(`14 FECHA DE ATENCIÓN`, "%d-%m-%Y"), "%Y")) |>
   filter(!is.na(`1 NUMERO DE HISTORIA`)) |>
   # filter(!`N°` == "N°") |>
   rowid_to_column("ID") |>
   mutate(source = files[8])
 
 my_data[[8]] <- my_data[[8]] |>
-  select(id = matches("^ID$"),
+  select(anho = matches("FECHA DE ATENCIÓN"),
+         id = matches("^ID$"),
          source = matches("source"),
          dni = matches("DNI"),
          edad = matches("EDAD"),
@@ -984,13 +998,15 @@ my_data[[8]] <- my_data[[8]] |>
 ### 9
 
 my_data[[9]] <- my_data[[9]] |>
+  mutate(`FECHA DE EMO` = format(as.Date(`FECHA DE EMO`, "%Y-%m-%d"), "%Y")) |>
   # filter(!is.na(`N°`)) |>
   # filter(!`N°` == "N°") |>
   rowid_to_column("ID") |>
   mutate(source = files[9])
 
 my_data[[9]] <- my_data[[9]] |>
-  select(id = matches("^ID$"),
+  select(anho = matches("FECHA DE EMO"),
+         id = matches("^ID$"),
          source = matches("source"),
          dni = matches("DNI"),
          edad = matches("^EDAD"),
@@ -1018,13 +1034,15 @@ my_data[[9]] <- my_data[[9]] |>
 ### 10
 
 my_data[[10]] <- my_data[[10]] |>
+  mutate(`FECHA DE EMO` = format(as.Date(`FECHA DE EMO`, "%Y-%m-%d"), "%Y")) |>
   # filter(!is.na(`N°`)) |>
   # filter(!`N°` == "N°") |>
   rowid_to_column("ID") |>
   mutate(source = files[10])
 
 my_data[[10]] <- my_data[[10]] |>
-  select(id = matches("^ID$"),
+  select(anho = matches("FECHA DE EMO"),
+         id = matches("^ID$"),
          source = matches("source"),
          dni = matches("DNI"),
          edad = matches("^EDAD"),
@@ -1087,6 +1105,7 @@ colnames11 <- c(
 names(my_data[[11]]) <- colnames11
 
 my_data[[11]] <- my_data[[11]] |>
+  mutate(`Fecha Evaluación` = format(as.Date(`Fecha Evaluación`, "%d/%m/%Y"), "%Y")) |>
   filter(!is.na(`Glucosa`)) |>
   # filter(!`N°` == "N°") |>
   rowid_to_column("ID") |>
@@ -1094,7 +1113,8 @@ my_data[[11]] <- my_data[[11]] |>
   filter(ID > 2)
 
 my_data[[11]] <- my_data[[11]] |>
-  select(id = matches("^ID$"),
+  select(anho = matches("FECHA EVALUACIÓN"),
+         id = matches("^ID$"),
          source = matches("source"),
          dni = matches("DNI"),
          edad = matches("^EDAD"),
@@ -1105,7 +1125,7 @@ my_data[[11]] <- my_data[[11]] |>
          plaq = matches("^PLAQ"),
          leuc = matches("^LEUC"),
          glu = matches("^GLUCOSA"),
-         ct = matches("COLESTERO"),
+         ct = matches("COLESTEROl TOTAL"),
          trig = matches("TRIGLI"),
          hdl = matches("^HDL"),
          ldl = matches("^LDL"),
@@ -1120,21 +1140,18 @@ my_data[[11]] <- my_data[[11]] |>
 
 
 
-View(my_data[[11]])
-
-
-
 
 ## 12
-
 my_data[[12]] <- my_data[[12]] |>
+  mutate(`FECHA_EVALUACION` = format(as.Date(`FECHA_EVALUACION`, "%Y-%m-%d"), "%Y")) |>
   # filter(!is.na(`1 NUMERO DE HISTORIA`)) |>
   # filter(!`N°` == "N°") |>
   rowid_to_column("ID") |>
   mutate(source = files[12]) 
 
 my_data[[12]] <- my_data[[12]] |>
-  select(id = matches("^ID$"),
+  select(anho = matches("FECHA_EVALUACION"),
+         id = matches("^ID$"),
          source = matches("source"),
          dni = matches("DNI"),
          edad = matches("^EDAD"),
