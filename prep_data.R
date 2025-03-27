@@ -3,7 +3,7 @@ my_data[[1]][5,5] <- "APPATERNO"
 my_data[[1]][5,6] <- "APMATERNO"
 my_data[[1]][5,69] <- "MCHC_2"
 names(my_data[[1]]) <- my_data[[1]][5,]
-
+by = join_by(dni)
 ## my_data[[1]]
 
 my_data[[1]] <- my_data[[1]] |>
@@ -142,6 +142,84 @@ my_data[[4]] <- my_data[[4]] |>
          audio = matches("AUDIO"),
          rx_torax = matches("RX"),
          ekg = matches("EKG"))
+
+### 11
+
+colnames11 <- c(
+  "Nombres y Apellidos",
+  "DNI",
+  "Genero",
+  "Edad",
+  "FechaNacimiento",
+  "FechaRegistro",
+  "Fecha Evaluación",
+  "Empresa",
+  "Resultado",
+  "Anti Hvc",
+  "Antigeno Especifico Prostatico (Psa)",
+  "Bk Directo Coloración Zhiel Neelsen",
+  "Bk Directo Especimen",
+  "Colesterol Total",
+  "orina Glucosa",
+  "orina Hematies",
+  "orina Hemoglobina",
+  "orina Leucocitos",
+  "Glucosa",
+  "Factor Rh",
+  "Grupo Sanguineo",
+  "Hdl Colesterol",
+  "Eosinofilos",
+  "Hematocrito",
+  "Hemoglobina",
+  "Plaquetas",
+  "Hiv Ag/Ac",
+  "Ldl Colesterol",
+  "Serologia  Sifilis (Rpr)",
+  "Trigliceridos"
+)
+
+names(my_data[[11]]) <- colnames11
+
+my_data[[11]] <- my_data[[11]] |>
+  mutate(`Fecha Evaluación` = format(as.Date(`Fecha Evaluación`, "%d/%m/%Y"), "%Y")) |>
+  # filter(!is.na(`Glucosa`)) |>
+  # filter(!`N°` == "N°") |>
+  rowid_to_column("ID") |>
+  mutate(source = files[11]) |>
+  filter(ID > 2)
+
+my_data[[11]] <- my_data[[11]] |>
+  select(anho = matches("FECHA EVALUACIÓN"),
+         id = matches("^ID$"),
+         source = matches("source"),
+         dni = matches("DNI"),
+         edad = matches("^EDAD"),
+         sexo = matches("SEXO"),
+         perabd = matches("PERIMETRO"),
+         presionarterial = matches("^PA$"),
+         hb = matches("^Hemo"),
+         plaq = matches("^PLAQ"),
+         leuc = matches("^LEUC"),
+         glu = matches("^GLUCOSA"),
+         ct = matches("COLESTEROl TOTAL"),
+         trig = matches("TRIGLI"),
+         hdl = matches("^HDL"),
+         ldl = matches("^LDL"),
+         presion_sis = matches("PAS"),
+         presion_dia = matches("PAD"),
+         imc = matches("^IMC"),
+         fc = matches("FC"),
+         oftalmo = matches("OFTALMO"),
+         audio = matches("AUDIO"),
+         rx_torax = matches("torax$"),
+         ekg = matches("EKG")) |>
+  mutate(dni = zoo::na.locf(dni)) |>
+  replace_na(as.list(rep.na)) |>
+  mutate(edad = as.numeric(str_extract(edad, "[0-9]+"))) |>
+  mutate(across(hb:ldl, as.numeric)) |>
+  aggregate(cbind(edad,hb,plaq,glu,ct,trig,hdl,ldl) ~ dni, sum)
+
+
 
 ## my_data[[5]]
 
@@ -358,7 +436,9 @@ my_data[[5]] <- my_data[[5]] |>
          oftalmo = matches("^74 DIAG"),
          audio = matches("126 DIAG"),
          rx_torax = matches("144 DIAGN"),
-         ekg = matches("35 DIAGNOSTICO")) #EKG
+         ekg = matches("35 DIAGNOSTICO")) |>
+  left_join(my_data[[11]] |> select(-edad), by)
+  #EKG
 
 ## my_data[[6]]
 
@@ -560,7 +640,8 @@ my_data[[6]] <- my_data[[6]] |>
          oftalmo = matches("^77 DIAG"),
          audio = matches("123 DIAG"),
          rx_torax = matches("138 DIAGN"),
-         ekg = matches("35 DIAGNOSTICO")) #EKG
+         ekg = matches("35 DIAGNOSTICO")) |>
+  left_join(my_data[[11]] |> select(-edad), by)
 
 
 ### 7
@@ -778,7 +859,8 @@ my_data[[7]] <- my_data[[7]] |>
          oftalmo = matches("^69 DIAG"),
          audio = matches("117 DIAG"),
          rx_torax = matches("135 DIAGN"),
-         ekg = matches("^35 DIAGNOSTICO")) #EKG
+         ekg = matches("^35 DIAGNOSTICO")) |>
+  left_join(my_data[[11]] |> select(-edad), by)
 
 ### 8
 
@@ -992,7 +1074,8 @@ my_data[[8]] <- my_data[[8]] |>
          oftalmo = matches("^66 DIAG"),
          audio = matches("117 DIAG"),
          rx_torax = matches("135 DIAGN"),
-         ekg = matches("^35 DIAGNOSTICO")) #EKG
+         ekg = matches("^35 DIAGNOSTICO")) |>
+  left_join(my_data[[11]] |> select(-edad), by)
 
 
 ### 9
@@ -1066,77 +1149,6 @@ my_data[[10]] <- my_data[[10]] |>
          rx_torax = matches("torax$"),
          ekg = matches("EKG"))
 
-
-### 11
-
-colnames11 <- c(
-  "Nombres y Apellidos",
-  "DNI",
-  "Genero",
-  "Edad",
-  "FechaNacimiento",
-  "FechaRegistro",
-  "Fecha Evaluación",
-  "Empresa",
-  "Resultado",
-  "Anti Hvc",
-  "Antigeno Especifico Prostatico (Psa)",
-  "Bk Directo Coloración Zhiel Neelsen",
-  "Bk Directo Especimen",
-  "Colesterol Total",
-  "orina Glucosa",
-  "orina Hematies",
-  "orina Hemoglobina",
-  "orina Leucocitos",
-  "Glucosa",
-  "Factor Rh",
-  "Grupo Sanguineo",
-  "Hdl Colesterol",
-  "Eosinofilos",
-  "Hematocrito",
-  "Hemoglobina",
-  "Plaquetas",
-  "Hiv Ag/Ac",
-  "Ldl Colesterol",
-  "Serologia  Sifilis (Rpr)",
-  "Trigliceridos"
-)
-
-names(my_data[[11]]) <- colnames11
-
-my_data[[11]] <- my_data[[11]] |>
-  mutate(`Fecha Evaluación` = format(as.Date(`Fecha Evaluación`, "%d/%m/%Y"), "%Y")) |>
-  filter(!is.na(`Glucosa`)) |>
-  # filter(!`N°` == "N°") |>
-  rowid_to_column("ID") |>
-  mutate(source = files[11]) |>
-  filter(ID > 2)
-
-my_data[[11]] <- my_data[[11]] |>
-  select(anho = matches("FECHA EVALUACIÓN"),
-         id = matches("^ID$"),
-         source = matches("source"),
-         dni = matches("DNI"),
-         edad = matches("^EDAD"),
-         sexo = matches("SEXO"),
-         perabd = matches("PERIMETRO"),
-         presionarterial = matches("^PA$"),
-         hb = matches("^Hemo"),
-         plaq = matches("^PLAQ"),
-         leuc = matches("^LEUC"),
-         glu = matches("^GLUCOSA"),
-         ct = matches("COLESTEROl TOTAL"),
-         trig = matches("TRIGLI"),
-         hdl = matches("^HDL"),
-         ldl = matches("^LDL"),
-         presion_sis = matches("PAS"),
-         presion_dia = matches("PAD"),
-         imc = matches("^IMC"),
-         fc = matches("FC"),
-         oftalmo = matches("OFTALMO"),
-         audio = matches("AUDIO"),
-         rx_torax = matches("torax$"),
-         ekg = matches("EKG"))
 
 
 
