@@ -12,8 +12,8 @@ my_data[[1]] <- my_data[[1]] |>
   filter(!`N°` == "N°") |>
   rowid_to_column("ID") |>
   mutate(source = files[1]) 
-  
-my_data[[1]] <-  my_data[[1]] %>%
+
+my_data[[1]] <- my_data[[1]] %>%
   select(anho = matches("FECHA DE ATENCION"),
          id = matches("^ID$"),
          source = matches("source"),
@@ -37,7 +37,11 @@ my_data[[1]] <-  my_data[[1]] %>%
          oftalmo = matches("OFTALMO"),
          audio = matches("AUDIO"),
          rx_torax = matches("RX"),
-         ekg = matches("EKG"))
+         ekg = matches("EKG"),
+         grupo = matches("GRUPO SANGU[IÍ]NEO$"),
+         factor = matches("FACTOR RH$"),
+         cargo = matches("CARGO$"),
+         antecedentes = matches("ANTECEDENTES"))
 
 ## my_data[[2]]
 
@@ -71,7 +75,13 @@ my_data[[2]] <- my_data[[2]] |>
          oftalmo = matches("OFTALMO"),
          audio = matches("AUDIO"),
          rx_torax = matches("RX"),
-         ekg = matches("EKG"))
+         ekg = matches("EKG"),
+         grupo = matches("GRUPO SANGU[IÍ]NEO$"),
+         factor = matches("FACTOR RH$"),
+         cargo = matches("CARGO$|^PUESTO"),
+         antecedentes = matches("ANTECEDENTES"),
+         antHTa = matches("ANT. HTA"),
+         antDM = matches("ANT. DM"))
 
 ## my_data[[3]]
 
@@ -105,7 +115,13 @@ my_data[[3]] <- my_data[[3]] |>
          oftalmo = matches("OFTALMO"),
          audio = matches("AUDIO"),
          rx_torax = matches("RX"),
-         ekg = matches("EKG"))
+         ekg = matches("EKG"),
+         grupo = matches("GRUPO SANGU[IÍ]NEO$"),
+         factor = matches("FACTOR RH$"),
+         cargo = matches("CARGO$|^PUESTO"),
+         antecedentes = matches("ANTECEDENTES"),
+         antHTa = matches("ANT. HTA"),
+         antDM = matches("ANT. DM"))
 
 
 ## my_data[[4]]
@@ -141,7 +157,16 @@ my_data[[4]] <- my_data[[4]] |>
          oftalmo = matches("OFTALMO"),
          audio = matches("AUDIO"),
          rx_torax = matches("RX"),
-         ekg = matches("EKG"))
+         ekg = matches("EKG"),
+         grupo = matches("GRUPO SANGU[IÍ]NEO$"),
+         factor = matches("FACTOR RH$"),
+         cargo = matches("CARGO$|^PUESTO"),
+         antecedentes = matches("ANTECEDENTES"),
+         antHTa = matches("ANT. HTA"),
+         antDM = matches("ANT. DM")) |>
+  left_join(my_data[[3]] |> 
+              select(-id, -source, -edad, -presionarterial,
+                     -ct, -trig, -cargo), by)
 
 ### 11
 
@@ -212,12 +237,22 @@ my_data[[11]] <- my_data[[11]] |>
          oftalmo = matches("OFTALMO"),
          audio = matches("AUDIO"),
          rx_torax = matches("torax$"),
-         ekg = matches("EKG")) |>
-  mutate(dni = zoo::na.locf(dni)) |>
-  replace_na(as.list(rep.na)) |>
+         ekg = matches("EKG"),
+         grupo = matches("GRUPO SANGU[IÍ]NEO$"),
+         factor = matches("FACTOR RH$"),
+         cargo = matches("CARGO$|^PUESTO"),
+         antecedentes = matches("ANTECEDENTES"),
+         antHTa = matches("ANT. HTA"),
+         antDM = matches("ANT. DM")) |>
+  mutate(dni = zoo::na.locf(dni)) %>%
+  replace_na(as.list(setNames(
+    data.frame(
+      matrix(ncol = length(names(.)), nrow = 1, data = '0')
+    ), names(.))
+  )) |>
   mutate(edad = as.numeric(str_extract(edad, "[0-9]+"))) |>
   mutate(across(hb:ldl, as.numeric)) |>
-  aggregate(cbind(edad,hb,plaq,glu,ct,trig,hdl,ldl) ~ dni, sum)
+  aggregate(cbind(edad,hb,plaq,glu,ct,trig,hdl,ldl,grupo,factor) ~ dni, max)
 
 
 
@@ -436,7 +471,13 @@ my_data[[5]] <- my_data[[5]] |>
          oftalmo = matches("^74 DIAG"),
          audio = matches("126 DIAG"),
          rx_torax = matches("144 DIAGN"),
-         ekg = matches("35 DIAGNOSTICO")) |>
+         ekg = matches("35 DIAGNOSTICO"),
+         grupo = matches("GRUPO SANGU[IÍ]NEO$"),
+         factor = matches("FACTOR RH$"),
+         cargo = matches("CARGO$|^PUESTO"),
+         antecedentes = matches("ANTECEDENTES PERSONALES"),
+         antHTa = matches("ANT. HTA"),
+         antDM = matches("ANT. DM")) |>
   left_join(my_data[[11]] |> select(-edad), by)
   #EKG
 
@@ -640,7 +681,13 @@ my_data[[6]] <- my_data[[6]] |>
          oftalmo = matches("^77 DIAG"),
          audio = matches("123 DIAG"),
          rx_torax = matches("138 DIAGN"),
-         ekg = matches("35 DIAGNOSTICO")) |>
+         ekg = matches("35 DIAGNOSTICO"),
+         grupo = matches("GRUPO SANGU[IÍ]NEO$"),
+         factor = matches("FACTOR RH$"),
+         cargo = matches("CARGO$|^PUESTO"),
+         antecedentes = matches("ANTECEDENTES PERSONALES"),
+         antHTa = matches("ANT. HTA"),
+         antDM = matches("ANT. DM")) |>
   left_join(my_data[[11]] |> select(-edad), by)
 
 
@@ -859,7 +906,13 @@ my_data[[7]] <- my_data[[7]] |>
          oftalmo = matches("^69 DIAG"),
          audio = matches("117 DIAG"),
          rx_torax = matches("135 DIAGN"),
-         ekg = matches("^35 DIAGNOSTICO")) |>
+         ekg = matches("^35 DIAGNOSTICO"),
+         grupo = matches("GRUPO SANGU[IÍ]NEO$"),
+         factor = matches("FACTOR RH$"),
+         cargo = matches("CARGO$|^PUESTO"),
+         antecedentes = matches("ANTECEDENTES PERSONALES"),
+         antHTa = matches("ANT. HTA"),
+         antDM = matches("ANT. DM")) |>
   left_join(my_data[[11]] |> select(-edad), by)
 
 ### 8
@@ -1074,7 +1127,13 @@ my_data[[8]] <- my_data[[8]] |>
          oftalmo = matches("^66 DIAG"),
          audio = matches("117 DIAG"),
          rx_torax = matches("135 DIAGN"),
-         ekg = matches("^35 DIAGNOSTICO")) |>
+         ekg = matches("^35 DIAGNOSTICO"),
+         grupo = matches("GRUPO SANGU[IÍ]NEO$"),
+         factor = matches("FACTOR RH$"),
+         cargo = matches("CARGO$|^PUESTO"),
+         antecedentes = matches("ANTECEDENTES PERSONALES"),
+         antHTa = matches("ANT. HTA"),
+         antDM = matches("ANT. DM")) |>
   left_join(my_data[[11]] |> select(-edad), by)
 
 
@@ -1111,7 +1170,13 @@ my_data[[9]] <- my_data[[9]] |>
          oftalmo = matches("OFTALMO"),
          audio = matches("AUDIO"),
          rx_torax = matches("torax$"),
-         ekg = matches("EKG"))
+         ekg = matches("EKG"),
+         grupo = matches("GRUPO$"),
+         factor = matches("RH$"),
+         cargo = matches("CARGO$|^PUESTO"),
+         antecedentes = matches("ANTECEDENTES PERSONALES"),
+         antHTa = matches("ANT. HTA"),
+         antDM = matches("ANT. DM"))
 
 
 ### 10
@@ -1147,7 +1212,13 @@ my_data[[10]] <- my_data[[10]] |>
          oftalmo = matches("OFTALMO"),
          audio = matches("AUDIO"),
          rx_torax = matches("torax$"),
-         ekg = matches("EKG"))
+         ekg = matches("EKG"),
+         grupo = matches("GRUPO$"),
+         factor = matches("RH$"),
+         cargo = matches("CARGO$|^PUESTO"),
+         antecedentes = matches("ANTECEDENTES PERSONALES"),
+         antHTa = matches("ANT. HTA"),
+         antDM = matches("ANT. DM"))
 
 
 
@@ -1185,7 +1256,13 @@ my_data[[12]] <- my_data[[12]] |>
          oftalmo = matches("OFTALMO"),
          audio = matches("AUDIO"),
          rx_torax = matches("torax$"),
-         ekg = matches("EKG"))
+         ekg = matches("EKG"),
+         grupo = matches("GRUPO$"),
+         factor = matches("RH$"),
+         cargo = matches("CARGO$|^PUESTO"),
+         antecedentes = matches("ANTECEDENTES PERSONALES"),
+         antHTa = matches("ANT. HTA"),
+         antDM = matches("ANT. DM"))
 
 
 
