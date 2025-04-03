@@ -41,7 +41,11 @@ my_data[[1]] <- my_data[[1]] %>%
          grupo = matches("GRUPO SANGU[IÍ]NEO$"),
          factor = matches("FACTOR RH$"),
          cargo = matches("CARGO$"),
-         antecedentes = matches("ANTECEDENTES"))
+         antecedentes = matches("ANTECEDENTES"),
+         avlejosodsc = matches("AV LEJOS OD SC"),
+         avlejosoisc = matches("AV LEJOS OI SC"),
+         avlejosodcc = matches("AV LEJOS OD CC"),
+         avlejosoicc = matches("AV LEJOS OI CC"))
 
 ## my_data[[2]]
 
@@ -155,15 +159,19 @@ my_data[[4]] <- my_data[[4]] |>
          imc = matches("^IMC"),
          # matches("FC"),
          oftalmo = matches("OFTALMO"),
-         audio = matches("AUDIO"),
-         rx_torax = matches("RX"),
+         audio = matches("KLOCKHOFF"),
+         rx_torax = matches("RADIOGRAFÍA"),
          ekg = matches("EKG"),
-         grupo = matches("GRUPO SANGU[IÍ]NEO$"),
+         grupo = matches("GRUPO SANGU[IÍ]NEO"),
          factor = matches("FACTOR RH$"),
          cargo = matches("CARGO$|^PUESTO"),
-         antecedentes = matches("ANTECEDENTES"),
+         antecedentes = matches("DX1"),
          antHTa = matches("ANT. HTA"),
-         antDM = matches("ANT. DM")) |>
+         antDM = matches("ANT. DM"),
+         avlejosodsc = matches("AV LEJOS OD SC"),
+         avlejosoisc = matches("AV LEJOS OI SC"),
+         avlejosodcc = matches("AV LEJOS OD CC"),
+         avlejosoicc = matches("AV LEJOS OI CC")) |>
   left_join(my_data[[3]] |> 
               select(-id, -source, -edad, -presionarterial,
                      -ct, -trig, -cargo), by)
@@ -477,7 +485,11 @@ my_data[[5]] <- my_data[[5]] |>
          cargo = matches("CARGO$|^PUESTO"),
          antecedentes = matches("ANTECEDENTES PERSONALES"),
          antHTa = matches("ANT. HTA"),
-         antDM = matches("ANT. DM")) |>
+         antDM = matches("ANT. DM"),
+         avlejosodsc = matches("AGUDEZA VISUAL LEJOS SIN CORRECTORES - OD"),
+         avlejosoisc = matches("AGUDEZA VISUAL LEJOS SIN CORRECTORES - OI"),
+         avlejosodcc = matches("AGUDEZA VISUAL LEJOS CON CORRECTORES - OD"),
+         avlejosoicc = matches("AGUDEZA VISUAL LEJOS CON CORRECTORES - OI")) |>
   left_join(my_data[[11]] |> select(-edad), by)
   #EKG
 
@@ -687,7 +699,11 @@ my_data[[6]] <- my_data[[6]] |>
          cargo = matches("CARGO$|^PUESTO"),
          antecedentes = matches("ANTECEDENTES PERSONALES"),
          antHTa = matches("ANT. HTA"),
-         antDM = matches("ANT. DM")) |>
+         antDM = matches("ANT. DM"),
+         avlejosodsc = matches("AGUDEZA VISUAL LEJOS SIN CORRECTORES - OD"),
+         avlejosoisc = matches("AGUDEZA VISUAL LEJOS SIN CORRECTORES - OI"),
+         avlejosodcc = matches("AGUDEZA VISUAL LEJOS CON CORRECTORES - OD"),
+         avlejosoicc = matches("AGUDEZA VISUAL LEJOS CON CORRECTORES - OI")) |>
   left_join(my_data[[11]] |> select(-edad), by)
 
 
@@ -912,7 +928,11 @@ my_data[[7]] <- my_data[[7]] |>
          cargo = matches("CARGO$|^PUESTO"),
          antecedentes = matches("ANTECEDENTES PERSONALES"),
          antHTa = matches("ANT. HTA"),
-         antDM = matches("ANT. DM")) |>
+         antDM = matches("ANT. DM"),
+         avlejosodsc = matches("AGUDEZA VISUAL LEJOS SIN CORRECTORES - OD"),
+         avlejosoisc = matches("AGUDEZA VISUAL LEJOS SIN CORRECTORES - OI"),
+         avlejosodcc = matches("AGUDEZA VISUAL LEJOS CON CORRECTORES - OD"),
+         avlejosoicc = matches("AGUDEZA VISUAL LEJOS CON CORRECTORES - OI")) |>
   left_join(my_data[[11]] |> select(-edad), by)
 
 ### 8
@@ -1133,7 +1153,11 @@ my_data[[8]] <- my_data[[8]] |>
          cargo = matches("CARGO$|^PUESTO"),
          antecedentes = matches("ANTECEDENTES PERSONALES"),
          antHTa = matches("ANT. HTA"),
-         antDM = matches("ANT. DM")) |>
+         antDM = matches("ANT. DM"),
+         avlejosodsc = matches("AGUDEZA VISUAL LEJOS SIN CORRECTORES - OD"),
+         avlejosoisc = matches("AGUDEZA VISUAL LEJOS SIN CORRECTORES - OI"),
+         avlejosodcc = matches("AGUDEZA VISUAL LEJOS CON CORRECTORES - OD"),
+         avlejosoicc = matches("AGUDEZA VISUAL LEJOS CON CORRECTORES - OI")) |>
   left_join(my_data[[11]] |> select(-edad), by)
 
 
@@ -1176,7 +1200,11 @@ my_data[[9]] <- my_data[[9]] |>
          cargo = matches("CARGO$|^PUESTO"),
          antecedentes = matches("ANTECEDENTES PERSONALES"),
          antHTa = matches("ANT. HTA"),
-         antDM = matches("ANT. DM"))
+         antDM = matches("ANT. DM"),
+         avlejosodsc = matches("VISI[OÓ]N LEJOS O\\.D S/C"),
+         avlejosoisc = matches("VISI[OÓ]N LEJOS O\\.I S/C"),
+         avlejosodcc = matches("VISI[OÓ]N LEJOS O\\.D C/C"),
+         avlejosoicc = matches("VISI[OÓ]N LEJOS O\\.I C/C"))
 
 
 ### 10
@@ -1218,7 +1246,11 @@ my_data[[10]] <- my_data[[10]] |>
          cargo = matches("CARGO$|^PUESTO"),
          antecedentes = matches("ANTECEDENTES PERSONALES"),
          antHTa = matches("ANT. HTA"),
-         antDM = matches("ANT. DM"))
+         antDM = matches("ANT. DM"),
+         avlejosodsc = matches("VISI[OÓ]N LEJOS O\\.D S/C"),
+         avlejosoisc = matches("VISI[OÓ]N LEJOS O\\.I S/C"),
+         avlejosodcc = matches("VISI[OÓ]N LEJOS O\\.D C/C"),
+         avlejosoicc = matches("VISI[OÓ]N LEJOS O\\.I C/C"))
 
 
 
@@ -1245,7 +1277,7 @@ my_data[[12]] <- my_data[[12]] |>
          plaq = matches("^PLAQ"),
          leuc = matches("^LEUC"),
          glu = matches("^GLUCOSA"),
-         ct = matches("COLESTERO$"),
+         ct = matches("^COLESTEROL"),
          trig = matches("TRIGLI"),
          hdl = matches("^HDL"),
          ldl = matches("^LDL"),
